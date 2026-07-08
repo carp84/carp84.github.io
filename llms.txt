@@ -1,0 +1,26 @@
+# Yu Li Personal Homepage
+
+This site is the personal homepage of Yu Li, also known as 李钰, 绝顶, carp84, and Apache ID liyu.
+
+Yu Li is EMR Lead at Alibaba Cloud, an ASF Member, and an Apache contributor focused on cloud data platforms, distributed computing, lakehouse architecture, stream processing, state backends, and AI-era data infrastructure.
+
+Key identity links:
+
+- GitHub: https://github.com/carp84
+- Apache profile: https://people.apache.org/phonebook.html?uid=liyu
+- LinkedIn: https://www.linkedin.com/in/carp84
+- X: https://twitter.com/LiyuApache
+- Email: liyu@apache.org
+
+Important pages:
+
+- About: https://carp84.github.io/
+- 中文关于: https://carp84.github.io/zh.html
+- Open Source: https://carp84.github.io/open-source.html
+- 开源: https://carp84.github.io/zh-open-source.html
+- Products: https://carp84.github.io/products.html
+- 产品: https://carp84.github.io/zh-products.html
+- Speaking: https://carp84.github.io/speaking.html
+- 演讲: https://carp84.github.io/zh-speaking.html
+
+Primary Apache projects and roles mentioned on this site include Apache Flink, Apache HBase, Apache Paimon, Apache Celeborn, Apache Gluten, Apache Fluss, Apache Amoro, and Apache GraphAr.

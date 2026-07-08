@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://carp84.github.io/</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/" />
+  </url>
+  <url>
+    <loc>https://carp84.github.io/zh.html</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/" />
+  </url>
+  <url>
+    <loc>https://carp84.github.io/open-source.html</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/open-source.html" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-open-source.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/open-source.html" />
+  </url>
+  <url>
+    <loc>https://carp84.github.io/zh-open-source.html</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/open-source.html" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-open-source.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/open-source.html" />
+  </url>
+  <url>
+    <loc>https://carp84.github.io/products.html</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/products.html" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-products.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/products.html" />
+  </url>
+  <url>
+    <loc>https://carp84.github.io/zh-products.html</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/products.html" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-products.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/products.html" />
+  </url>
+  <url>
+    <loc>https://carp84.github.io/speaking.html</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/speaking.html" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-speaking.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/speaking.html" />
+  </url>
+  <url>
+    <loc>https://carp84.github.io/zh-speaking.html</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/speaking.html" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-speaking.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/speaking.html" />
+  </url>
+</urlset>
