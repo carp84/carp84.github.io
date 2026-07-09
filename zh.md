@@ -23,11 +23,11 @@ permalink: /zh.html
 
 ## 关于我
 
-在阿里云，我负责 E-MapReduce（EMR）团队，工作横跨云上数据平台的产品方向、工程落地与开源协作。
+在阿里云，我负责 E-MapReduce（EMR）团队，主要工作包括云上数据平台的产品方向、工程落地与开源协作。
 
-我是 ASF Member，也是 Apache Flink、HBase、Paimon、Celeborn、Gluten、Fluss 等项目的 PMC Member；曾担任 Apache Paimon、Celeborn、Fluss 孵化阶段 Champion，并担任 Apache Amoro、GraphAr Mentor。我的 Apache 工作重点，是把生产系统需求与社区治理下的基础设施演进结合起来。
+我是 ASF Member，也是 Apache Flink、HBase、Paimon、Celeborn、Gluten、Fluss 等项目的 PMC Member；曾担任 Apache Paimon、Celeborn、Fluss 孵化阶段 Champion，并担任 Apache Amoro、GraphAr Mentor。我的 Apache 工作重点，是把生产系统中的实际需求和社区治理下的基础设施演进结合起来。
 
-早期在阿里巴巴，我参与计算平台与搜索基础设施建设，包括 HBase、大规模集群运维、Flink 状态存储以及中文开源社区工作。加入阿里之前，我在 IBM InfoSphere BigInsights 团队从事大数据与开源相关工作；研究生阶段在北航主要关注分布式计算与网格计算。
+在阿里巴巴早期，我参与过计算平台与搜索基础设施建设，包括 HBase、大规模集群运维、Flink 状态存储以及中文开源社区工作。加入阿里之前，我在 IBM InfoSphere BigInsights 团队从事大数据与开源相关工作；研究生阶段在北航主要关注分布式计算与网格计算。
 
 ## 背景
 
@@ -42,7 +42,7 @@ permalink: /zh.html
 
 ## 职业经历
 
-研究生毕业后，我的全职产业经历集中在两家公司：2010-2013 年在 IBM，2013 年至今在阿里巴巴。下面的时间线主要展开同一职业路径中的职责演进和范围变化。
+研究生毕业后，我的工作经历集中在两家公司：2010-2013 年在 IBM，2013 年至今在阿里巴巴。下面的时间线主要记录这一路径中的职责变化和工作范围扩展。
 
 {:.timeline}
 - <time>2023-至今</time><span>阿里云：负责 EMR 团队，覆盖 DataOps、开源计算引擎、元数据与安全、数据湖存储系统等方向。</span>
@@ -55,10 +55,10 @@ permalink: /zh.html
 
 ## 学术经历
 
-在深入 Apache 生态和云上数据基础设施之前，我的早期学术工作主要关注异构集群调度与网页信息抽取。Google Scholar 和 ORCID 0000-0003-4355-2764 收录了这些早期论文。
+在深入 Apache 生态和云上数据基础设施之前，我的早期学术工作主要关注异构集群调度与网页信息抽取。Google Scholar 和 ORCID 0000-0003-4355-2764 收录了相关论文。
 
 学术主页
-: [Google Scholar](https://scholar.google.com/citations?user=oU9DCnoAAAAJ) 和 [ORCID](https://orcid.org/0000-0003-4355-2764) 记录了我以 Yu Li / 李钰 发表的早期学术论文。
+: [Google Scholar](https://scholar.google.com/citations?user=oU9DCnoAAAAJ) 和 [ORCID](https://orcid.org/0000-0003-4355-2764) 收录了我以 Yu Li / 李钰 发表的早期学术论文。
 
 代表论文
 :

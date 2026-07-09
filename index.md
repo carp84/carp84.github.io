@@ -42,12 +42,12 @@ Expertise
 
 ## Career Timeline
 
-Since completing graduate studies, my full-time industry career has been with two companies: IBM from 2010 to 2013, and Alibaba from 2013 to today. The timeline below breaks down role evolution and scope changes within that continuous path.
+Since completing graduate studies, I have worked at two companies: IBM from 2010 to 2013, and Alibaba from 2013 to today. The timeline below shows how my responsibilities and scope have grown along that path.
 
 {:.timeline}
 - <time>2023-now</time><span>Alibaba Cloud: Head of EMR, covering DataOps, open-source computing engines, metadata and security, and lake storage systems.</span>
 - <time>2021-2023</time><span>Alibaba Cloud: Led Flink storage and EMR platform teams, including checkpoint, savepoint, state backend, EMR console, monitoring, studio, and resilience work.</span>
-- <time>2018-2021</time><span>Alibaba Cloud: Led realtime compute storage work, focusing on Flink state backend performance, stability, and production requirements.</span>
+- <time>2018-2021</time><span>Alibaba Cloud: Led real-time compute storage work, focusing on Flink state backend performance, stability, and production requirements.</span>
 - <time>2017-2018</time><span>Alibaba Search: Technical lead of the HBase team, including high-throughput storage work that reached 100K QPS per node during Double 11 production traffic.</span>
 - <time>2015-2016</time><span>Alibaba Search: Core member of the data platform team, working on Hadoop/HBase clusters serving hybrid index-building and real-time query workloads at large scale.</span>
 - <time>2013-2015</time><span>Alibaba: Member of the HBase team, developing and maintaining HBase for business requirements and big-data production workloads.</span>
