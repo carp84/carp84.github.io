@@ -344,7 +344,7 @@ a:hover {
 
 .paper-list {
   display: grid;
-  gap: 8px;
+  gap: 12px;
   max-width: 78ch;
   margin: 0;
   padding-left: 1.1rem;
@@ -353,6 +353,37 @@ a:hover {
 
 .paper-list li {
   padding-left: 2px;
+}
+
+.paper-title {
+  display: block;
+}
+
+.paper-meta {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted-soft);
+  font-size: 0.94rem;
+}
+
+.paper-meta strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.author-position {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45em;
+  padding: 0 0.38em;
+  border: 1px solid rgba(20, 102, 95, 0.2);
+  border-radius: 5px;
+  background: rgba(20, 102, 95, 0.08);
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  vertical-align: 0.08em;
 }
 
 .table-wrap {
