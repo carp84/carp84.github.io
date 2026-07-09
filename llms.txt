@@ -10,6 +10,8 @@ Key identity links:
 - Apache profile: https://people.apache.org/phonebook.html?uid=liyu
 - LinkedIn: https://www.linkedin.com/in/carp84
 - X: https://twitter.com/LiyuApache
+- Google Scholar: https://scholar.google.com/citations?user=oU9DCnoAAAAJ
+- ORCID: https://orcid.org/0000-0003-4355-2764
 - Email: liyu@apache.org
 
 Important pages:
@@ -24,3 +26,9 @@ Important pages:
 - 演讲: https://carp84.github.io/zh-speaking.html
 
 Primary Apache projects and roles mentioned on this site include Apache Flink, Apache HBase, Apache Paimon, Apache Celeborn, Apache Gluten, Apache Fluss, Apache Amoro, and Apache GraphAr.
+
+Academic profiles:
+
+- Google Scholar profile: https://scholar.google.com/citations?user=oU9DCnoAAAAJ
+- ORCID: https://orcid.org/0000-0003-4355-2764
+- Earlier publications include work on heterogeneous cluster scheduling and web information retrieval, with DOI links on the About page.
