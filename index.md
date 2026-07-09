@@ -27,7 +27,7 @@ At Alibaba Cloud, I lead the E-MapReduce (EMR) team. My role combines product di
 
 I am an ASF Member and serve in the Apache ecosystem across Flink, HBase, Paimon, Celeborn, Gluten, Fluss, Amoro, and GraphAr. My Apache work connects production requirements with community-governed infrastructure across storage, state management, lakehouse systems, and AI-era data platforms.
 
-Earlier at Alibaba, I worked on computing platform and search infrastructure, including HBase, large-scale cluster operations, Flink state storage, and open-source community work in China. Before Alibaba, I worked on IBM InfoSphere BigInsights after graduate study at Beihang University.
+Earlier at Alibaba, I worked on computing platform and search infrastructure, including HBase, large-scale cluster operations, Flink state storage, and open-source community work in China. Before Alibaba, I worked on IBM InfoSphere BigInsights after completing graduate studies at Beihang University.
 
 ## Background
 
@@ -42,14 +42,16 @@ Expertise
 
 ## Career Timeline
 
+Since completing graduate studies, my full-time industry career has been with two companies: IBM from 2010 to 2013, and Alibaba from 2013 to today. The timeline below breaks down role evolution and scope changes within that continuous path.
+
 {:.timeline}
-- <time>2023-now</time><span>Head of Alibaba Cloud EMR, covering DataOps, open-source computing engines, metadata and security, and lake storage systems.</span>
-- <time>2021-2023</time><span>Led Flink storage and EMR platform teams, including checkpoint, savepoint, state backend, EMR console, monitoring, studio, and resilience work.</span>
-- <time>2018-2021</time><span>Led storage work in Alibaba Cloud realtime compute, focusing on Flink state backend performance, stability, and production requirements.</span>
-- <time>2017-2018</time><span>Technical lead of the HBase team in Alibaba Search, including high-throughput storage work that reached 100K QPS per node during Double 11 production traffic.</span>
-- <time>2015-2016</time><span>Core member of Alibaba Search data platform team, working on Hadoop/HBase clusters serving hybrid index-building and real-time query workloads at large scale.</span>
-- <time>2013-2015</time><span>Member of Alibaba's HBase team, developing and maintaining HBase for business requirements and big-data production workloads.</span>
-- <time>2010-2013</time><span>Staff Software Engineer at IBM China Software Development Laboratory, working on InfoSphere BigInsights and leading open-source team efforts.</span>
+- <time>2023-now</time><span>Alibaba Cloud: Head of EMR, covering DataOps, open-source computing engines, metadata and security, and lake storage systems.</span>
+- <time>2021-2023</time><span>Alibaba Cloud: Led Flink storage and EMR platform teams, including checkpoint, savepoint, state backend, EMR console, monitoring, studio, and resilience work.</span>
+- <time>2018-2021</time><span>Alibaba Cloud: Led realtime compute storage work, focusing on Flink state backend performance, stability, and production requirements.</span>
+- <time>2017-2018</time><span>Alibaba Search: Technical lead of the HBase team, including high-throughput storage work that reached 100K QPS per node during Double 11 production traffic.</span>
+- <time>2015-2016</time><span>Alibaba Search: Core member of the data platform team, working on Hadoop/HBase clusters serving hybrid index-building and real-time query workloads at large scale.</span>
+- <time>2013-2015</time><span>Alibaba: Member of the HBase team, developing and maintaining HBase for business requirements and big-data production workloads.</span>
+- <time>2010-2013</time><span>IBM China Software Development Laboratory: Staff Software Engineer, working on InfoSphere BigInsights and leading open-source team efforts.</span>
 
 ## Academic Work
 

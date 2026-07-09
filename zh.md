@@ -42,14 +42,16 @@ permalink: /zh.html
 
 ## 职业经历
 
+研究生毕业后，我的全职产业经历集中在两家公司：2010-2013 年在 IBM，2013 年至今在阿里巴巴。下面的时间线主要展开同一职业路径中的职责演进和范围变化。
+
 {:.timeline}
-- <time>2023-至今</time><span>负责阿里云 EMR 团队，覆盖 DataOps、开源计算引擎、元数据与安全、数据湖存储系统等方向。</span>
-- <time>2021-2023</time><span>负责 Flink 存储和 EMR 平台团队，推进 checkpoint、savepoint、state backend，以及 EMR 控制台、监控、Studio、稳定性等工作。</span>
-- <time>2018-2021</time><span>负责阿里云实时计算存储团队，聚焦 Flink state backend 的性能、稳定性和生产需求。</span>
-- <time>2017-2018</time><span>担任阿里巴巴搜索 HBase 团队技术负责人，推进双 11 生产环境单节点 100K QPS 级别的高吞吐存储工作。</span>
-- <time>2015-2016</time><span>作为搜索数据平台核心成员，参与服务索引构建与实时查询混合负载的大规模 Hadoop/HBase 集群。</span>
-- <time>2013-2015</time><span>加入阿里巴巴 HBase 团队，围绕业务需求和大数据生产负载进行 HBase 研发与维护。</span>
-- <time>2010-2013</time><span>在 IBM 中国开发中心担任 Staff Software Engineer，参与 InfoSphere BigInsights 并负责开源团队相关工作。</span>
+- <time>2023-至今</time><span>阿里云：负责 EMR 团队，覆盖 DataOps、开源计算引擎、元数据与安全、数据湖存储系统等方向。</span>
+- <time>2021-2023</time><span>阿里云：负责 Flink 存储和 EMR 平台团队，推进 checkpoint、savepoint、state backend，以及 EMR 控制台、监控、Studio、稳定性等工作。</span>
+- <time>2018-2021</time><span>阿里云：负责实时计算存储团队，聚焦 Flink state backend 的性能、稳定性和生产需求。</span>
+- <time>2017-2018</time><span>阿里巴巴搜索：担任 HBase 团队技术负责人，推进双 11 生产环境单节点 100K QPS 级别的高吞吐存储工作。</span>
+- <time>2015-2016</time><span>阿里巴巴搜索：作为数据平台核心成员，参与服务索引构建与实时查询混合负载的大规模 Hadoop/HBase 集群。</span>
+- <time>2013-2015</time><span>阿里巴巴：加入 HBase 团队，围绕业务需求和大数据生产负载进行 HBase 研发与维护。</span>
+- <time>2010-2013</time><span>IBM 中国开发中心：担任 Staff Software Engineer，参与 InfoSphere BigInsights 并负责开源团队相关工作。</span>
 
 ## 学术经历
 
