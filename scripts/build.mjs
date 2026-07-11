@@ -651,6 +651,6 @@ fs.writeFileSync(path.join(outDir, "sitemap.xml"), generateSitemap(sitemapEntrie
 
 copyDirectory(path.resolve(root, process.env.BLOG_ASSETS_DIR || "blog-source/assets"), path.join(outDir, "assets"));
 
-for (const file of ["styles.css", "robots.txt", "llms.txt"]) {
+for (const file of ["styles.css", "robots.txt", "llms.txt", "google0b1d946385823c31.html"]) {
   fs.copyFileSync(path.join(root, file), path.join(outDir, file));
 }
