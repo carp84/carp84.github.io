@@ -32,7 +32,9 @@ jobs:
           repository: ${{ env.BLOG_REPO }}
           token: ${{ env.BLOG_REPO_TOKEN }}
           path: blog-source
-          sparse-checkout: publish
+          sparse-checkout: |
+            publish
+            assets
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:

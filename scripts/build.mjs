@@ -47,6 +47,7 @@ function parseFrontMatter(source) {
 
 function inlineMarkdown(text) {
   return text
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) => `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`)
     .replace(/\[([^\]]+)\]\(([^)]+)\)(\{:\.([A-Za-z0-9_-]+)\})?/g, (_m, label, href, _attr, cls) => {
       const classAttr = cls ? ` class="${escapeHtml(cls)}"` : "";
       return `<a${classAttr} href="${escapeHtml(href)}">${label}</a>`;
@@ -137,6 +138,13 @@ function renderBlocks(lines) {
       continue;
     }
 
+    if (/^>\s?/.test(line)) {
+      const [blockquoteHtml, nextIndex] = renderBlockquote(lines, i);
+      html.push(blockquoteHtml);
+      i = nextIndex;
+      continue;
+    }
+
     if (i + 1 < lines.length && /^:\s*/.test(lines[i + 1])) {
       const [dlHtml, nextIndex] = renderDefinitionList(lines, i);
       html.push(dlHtml);
@@ -166,6 +174,16 @@ function renderBlocks(lines) {
     i = nextIndex;
   }
   return html.join("\n");
+}
+
+function renderBlockquote(lines, start) {
+  const parts = [];
+  let i = start;
+  while (i < lines.length && /^>\s?/.test(lines[i])) {
+    parts.push(lines[i].replace(/^>\s?/, "").trim());
+    i += 1;
+  }
+  return [`<blockquote><p>${inlineMarkdown(parts.join("<br>"))}</p></blockquote>`, i];
 }
 
 function renderParagraph(lines, start, classes) {
@@ -346,21 +364,34 @@ function readBlogPosts() {
 function renderBlogList(posts, lang) {
   const zh = lang === "zh-CN";
   const selected = posts.filter((post) => post.zh === zh);
-  if (!selected.length) {
+  const fallback = zh && !selected.length ? posts.filter((post) => !post.zh) : [];
+  if (!selected.length && !fallback.length) {
     return `<section class="section blog-index">
 <h2>${zh ? "即将更新" : "Coming Soon"}</h2>
 <p class="note">${zh ? "这里将陆续更新关于开源数据基础设施、Apache 项目和工程实践的文章。" : "Notes on open-source data infrastructure, Apache projects, and engineering practice will appear here."}</p>
 </section>`;
   }
+  if (fallback.length) {
+    return `<section class="section blog-index">
+<h2>英文文章</h2>
+<p class="note">以下文章暂未提供中文版。</p>
+${renderPostCards(fallback)}
+</section>`;
+  }
   return `<section class="section blog-index">
 <h2>${zh ? "最新文章" : "Latest Posts"}</h2>
-<div class="post-list">
-${selected.map((post) => `<article class="post-card">
+${renderPostCards(selected)}
+</section>`;
+}
+
+function renderPostCards(posts) {
+  return `<div class="post-list">
+${posts.map((post) => `<article class="post-card">
   <div class="post-meta"><time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date)}</time>${post.tags.length ? `<span>${post.tags.map(escapeHtml).join(" · ")}</span>` : ""}</div>
   <h3><a href="${escapeHtml(post.permalink.replace(/^\//, ""))}">${inlineMarkdown(post.title)}</a></h3>
   <p>${escapeHtml(post.summary)}</p>
 </article>`).join("\n")}
-</div></section>`;
+</div>`;
 }
 
 function renderPostPage(post) {
@@ -500,6 +531,20 @@ ${urls}
 `;
 }
 
+function copyDirectory(src, dest) {
+  if (!fs.existsSync(src)) return;
+  fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else if (entry.isFile()) {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
 fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -534,6 +579,8 @@ for (const post of blogPosts) {
 }
 
 fs.writeFileSync(path.join(outDir, "sitemap.xml"), generateSitemap(sitemapEntries));
+
+copyDirectory(path.resolve(root, process.env.BLOG_ASSETS_DIR || "blog-source/assets"), path.join(outDir, "assets"));
 
 for (const file of ["styles.css", "robots.txt", "llms.txt"]) {
   fs.copyFileSync(path.join(root, file), path.join(outDir, file));

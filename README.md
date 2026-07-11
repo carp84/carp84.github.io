@@ -38,9 +38,11 @@ Blog drafts can live in a private repository, for example `carp84/carp84-blog`:
 ```text
 draft/
 publish/
+assets/
 ```
 
 Only Markdown files under `publish/` are included in the public homepage build. Drafts should remain outside `publish/`.
+Public images and downloadable files should live under `assets/`, and posts should reference them with relative paths such as `../assets/my-post/image.png`.
 
 Each published post should use front matter:
 
