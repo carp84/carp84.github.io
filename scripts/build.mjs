@@ -600,6 +600,10 @@ ${urls}
 `;
 }
 
+function generateTextSitemap(entries) {
+  return `${entries.map((entry) => absoluteUrl(entry.canonical)).join("\n")}\n`;
+}
+
 function copyDirectory(src, dest) {
   if (!fs.existsSync(src)) return;
   fs.mkdirSync(dest, { recursive: true });
@@ -648,6 +652,7 @@ for (const post of blogPosts) {
 }
 
 fs.writeFileSync(path.join(outDir, "sitemap.xml"), generateSitemap(sitemapEntries));
+fs.writeFileSync(path.join(outDir, "sitemap.txt"), generateTextSitemap(sitemapEntries));
 
 copyDirectory(path.resolve(root, process.env.BLOG_ASSETS_DIR || "blog-source/assets"), path.join(outDir, "assets"));
 
