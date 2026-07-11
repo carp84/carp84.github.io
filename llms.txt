@@ -24,6 +24,8 @@ Important pages:
 - 产品: https://carp84.github.io/zh-products.html
 - Speaking: https://carp84.github.io/speaking.html
 - 演讲: https://carp84.github.io/zh-speaking.html
+- Blog: https://carp84.github.io/blog.html
+- 博客: https://carp84.github.io/zh-blog.html
 
 Primary Apache projects and roles mentioned on this site include Apache Flink, Apache HBase, Apache Paimon, Apache Celeborn, Apache Gluten, Apache Fluss, Apache Amoro, and Apache GraphAr.
 
@@ -32,3 +34,8 @@ Academic profiles:
 - Google Scholar profile: https://scholar.google.com/citations?user=oU9DCnoAAAAJ
 - ORCID: https://orcid.org/0000-0003-4355-2764
 - Earlier publications include work on heterogeneous cluster scheduling and web information retrieval, with DOI links on the About page.
+
+Blog posts:
+
+- Published blog posts are listed at https://carp84.github.io/blog.html and https://carp84.github.io/zh-blog.html.
+- Draft blog posts are not published on this site.

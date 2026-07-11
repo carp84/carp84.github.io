@@ -12,6 +12,8 @@ const pages = [
   "zh-products.md",
   "speaking.md",
   "zh-speaking.md",
+  "blog.md",
+  "zh-blog.md",
 ];
 
 function escapeHtml(value) {
@@ -50,6 +52,14 @@ function inlineMarkdown(text) {
       return `<a${classAttr} href="${escapeHtml(href)}">${label}</a>`;
     })
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+}
+
+function slugify(value) {
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "post";
 }
 
 function splitSections(markdown) {
@@ -259,6 +269,7 @@ function renderHeader(page) {
         ["open-source", "zh-open-source.html", "开源"],
         ["products", "zh-products.html", "产品"],
         ["speaking", "zh-speaking.html", "演讲"],
+        ["blog", "zh-blog.html", "博客"],
         [null, page.switch_url || "index.html", "English"],
       ]
     : [
@@ -266,6 +277,7 @@ function renderHeader(page) {
         ["open-source", "open-source.html", "Open Source"],
         ["products", "products.html", "Products"],
         ["speaking", "speaking.html", "Speaking"],
+        ["blog", "blog.html", "Blog"],
         [null, page.switch_url || "zh.html", "中文"],
       ];
   return `<header class="site-header">
@@ -274,6 +286,102 @@ function renderHeader(page) {
     ${links.map(([active, href, label]) => `<a ${active && page.active === active ? 'class="active" ' : ""}href="${href}">${label}</a>`).join("\n    ")}
   </nav>
 </header>`;
+}
+
+function stripHtml(value) {
+  return String(value || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+}
+
+function summarize(markdown, fallback = "") {
+  if (fallback) return fallback;
+  const text = markdown
+    .split("\n")
+    .filter((line) => line.trim() && !line.startsWith("#") && !parseClassLine(line).length)
+    .join(" ");
+  return stripHtml(inlineMarkdown(text)).slice(0, 180);
+}
+
+function readBlogPosts() {
+  const sourceDir = path.resolve(root, process.env.BLOG_SOURCE_DIR || "blog-source/publish");
+  if (!fs.existsSync(sourceDir)) return [];
+  const files = fs.readdirSync(sourceDir, { recursive: true })
+    .filter((file) => file.endsWith(".md") || file.endsWith(".markdown"))
+    .sort();
+  return files.map((file) => {
+    const abs = path.join(sourceDir, file);
+    const [frontMatter, markdown] = parseFrontMatter(fs.readFileSync(abs, "utf8"));
+    const lang = frontMatter.lang || (file.startsWith("zh/") ? "zh-CN" : "en");
+    const zh = lang === "zh-CN";
+    const slug = frontMatter.slug || slugify(path.basename(file).replace(/\.(md|markdown)$/, ""));
+    const date = frontMatter.date || "";
+    const title = frontMatter.title || slug;
+    const tags = (frontMatter.tags || "")
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+    const permalink = frontMatter.permalink || `/${zh ? "zh-blog" : "blog"}/${slug}.html`;
+    return {
+      ...frontMatter,
+      source: file,
+      markdown,
+      lang,
+      zh,
+      slug,
+      date,
+      title,
+      tags,
+      summary: summarize(markdown, frontMatter.summary),
+      permalink,
+      canonical: permalink,
+      href_en: frontMatter.href_en || (zh ? "/blog.html" : permalink),
+      href_zh: frontMatter.href_zh || (zh ? permalink : "/zh-blog.html"),
+      href_default: frontMatter.href_default || (zh ? "/blog.html" : permalink),
+      active: "blog",
+      layout: "post",
+      switch_url: zh ? "blog.html" : "zh-blog.html",
+    };
+  }).sort((a, b) => String(b.date).localeCompare(String(a.date)) || a.title.localeCompare(b.title));
+}
+
+function renderBlogList(posts, lang) {
+  const zh = lang === "zh-CN";
+  const selected = posts.filter((post) => post.zh === zh);
+  if (!selected.length) {
+    return `<section class="section blog-index">
+<h2>${zh ? "即将更新" : "Coming Soon"}</h2>
+<p class="note">${zh ? "这里将陆续更新关于开源数据基础设施、Apache 项目和工程实践的文章。" : "Notes on open-source data infrastructure, Apache projects, and engineering practice will appear here."}</p>
+</section>`;
+  }
+  return `<section class="section blog-index">
+<h2>${zh ? "最新文章" : "Latest Posts"}</h2>
+<div class="post-list">
+${selected.map((post) => `<article class="post-card">
+  <div class="post-meta"><time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date)}</time>${post.tags.length ? `<span>${post.tags.map(escapeHtml).join(" · ")}</span>` : ""}</div>
+  <h3><a href="${escapeHtml(post.permalink.replace(/^\//, ""))}">${inlineMarkdown(post.title)}</a></h3>
+  <p>${escapeHtml(post.summary)}</p>
+</article>`).join("\n")}
+</div></section>`;
+}
+
+function renderPostPage(post) {
+  const body = `<article class="post-page">
+  <header class="post-header">
+    <p class="eyebrow">${post.zh ? "博客" : "Blog"}</p>
+    <h1>${inlineMarkdown(post.title)}</h1>
+    <div class="post-meta"><time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date)}</time>${post.tags.length ? `<span>${post.tags.map(escapeHtml).join(" · ")}</span>` : ""}</div>
+  </header>
+  <section class="markdown-content">
+${renderMarkdown(post.markdown, "post")}
+  </section>
+</article>`;
+  return renderPage({
+    ...post,
+    title: `${post.title} | Yu Li`,
+    description: post.summary,
+    eyebrow: post.zh ? "博客" : "Blog",
+    headline: post.title,
+    lead: post.summary,
+  }, body);
 }
 
 function renderJsonLd(page) {
@@ -335,6 +443,8 @@ function renderPage(page, body) {
   const zh = page.lang === "zh-CN";
   const main = page.layout === "home"
     ? `<main class="page-shell">\n${renderProfileCard(page)}\n<section class="content">\n${body}\n</section>\n</main>`
+    : page.layout === "post"
+      ? `<main class="single-page">\n${body}\n</main>`
     : `<main class="single-page">\n<section class="section hero compact">\n<p class="eyebrow">${escapeHtml(page.eyebrow)}</p>\n<h1>${escapeHtml(page.headline)}</h1>\n${page.lead ? `<p class="lead">${escapeHtml(page.lead)}</p>` : ""}\n</section>\n${body}\n</main>`;
   return `<!doctype html>
 <html lang="${page.lang || "en"}">
@@ -364,19 +474,67 @@ function outputPathFor(page) {
   return path.join(outDir, page.permalink.replace(/^\//, ""));
 }
 
+function absoluteUrl(value) {
+  return `https://carp84.github.io${value}`;
+}
+
+function generateSitemap(entries) {
+  const urls = entries.map((entry) => {
+    const lastmod = entry.date || "2026-07-11";
+    const priority = entry.priority || (entry.active === "blog" ? "0.7" : "0.8");
+    return `  <url>
+    <loc>${absoluteUrl(entry.canonical)}</loc>
+    <lastmod>${escapeHtml(lastmod)}</lastmod>
+    <changefreq>${entry.changefreq || "monthly"}</changefreq>
+    <priority>${priority}</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="${absoluteUrl(entry.href_en)}" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="${absoluteUrl(entry.href_zh)}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${absoluteUrl(entry.href_default)}" />
+  </url>`;
+  }).join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${urls}
+</urlset>
+`;
+}
+
 fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
 
+const blogPosts = readBlogPosts();
+const sitemapEntries = [];
+
 for (const pageFile of pages) {
   const [page, markdown] = parseFrontMatter(fs.readFileSync(path.join(root, pageFile), "utf8"));
-  const body = renderMarkdown(markdown, page.layout);
+  const extraBody = page.active === "blog" ? `\n${renderBlogList(blogPosts, page.lang)}` : "";
+  const body = `${renderMarkdown(markdown, page.layout)}${extraBody}`;
   const html = renderPage(page, body);
   const dest = outputPathFor(page);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.writeFileSync(dest, html);
   console.log(`built ${path.relative(root, dest)}`);
+  sitemapEntries.push({
+    ...page,
+    priority: page.permalink === "/" || page.permalink === "/zh.html" ? "1.0" : page.active === "open-source" ? "0.9" : "0.8",
+  });
 }
 
-for (const file of ["styles.css", "robots.txt", "sitemap.xml", "llms.txt"]) {
+for (const post of blogPosts) {
+  const dest = outputPathFor(post);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.writeFileSync(dest, renderPostPage(post));
+  console.log(`built ${path.relative(root, dest)}`);
+  sitemapEntries.push({
+    ...post,
+    priority: "0.6",
+    changefreq: "yearly",
+  });
+}
+
+fs.writeFileSync(path.join(outDir, "sitemap.xml"), generateSitemap(sitemapEntries));
+
+for (const file of ["styles.css", "robots.txt", "llms.txt"]) {
   fs.copyFileSync(path.join(root, file), path.join(outDir, file));
 }

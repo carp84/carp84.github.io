@@ -73,4 +73,22 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-speaking.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/speaking.html" />
   </url>
+  <url>
+    <loc>https://carp84.github.io/blog.html</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/blog.html" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-blog.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/blog.html" />
+  </url>
+  <url>
+    <loc>https://carp84.github.io/zh-blog.html</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://carp84.github.io/blog.html" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io/zh-blog.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://carp84.github.io/blog.html" />
+  </url>
 </urlset>
