@@ -46,13 +46,26 @@ function parseFrontMatter(source) {
 }
 
 function inlineMarkdown(text) {
-  return text
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) => `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`)
+  const tokens = [];
+  const stash = (html) => {
+    const token = `%%HTMLTOKEN${tokens.length}%%`;
+    tokens.push(html);
+    return token;
+  };
+  let output = String(text)
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) => stash(`<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`))
     .replace(/\[([^\]]+)\]\(([^)]+)\)(\{:\.([A-Za-z0-9_-]+)\})?/g, (_m, label, href, _attr, cls) => {
       const classAttr = cls ? ` class="${escapeHtml(cls)}"` : "";
-      return `<a${classAttr} href="${escapeHtml(href)}">${label}</a>`;
+      const externalAttr = /^https?:\/\//.test(href) ? ' target="_blank" rel="noopener noreferrer"' : "";
+      return stash(`<a${classAttr} href="${escapeHtml(href)}"${externalAttr}>${label}</a>`);
     })
-    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    .replace(/`([^`]+)`/g, (_m, code) => stash(`<code>${escapeHtml(code)}</code>`))
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^\w])_([^_\n]+)_/g, "$1<em>$2</em>");
+  tokens.forEach((html, index) => {
+    output = output.replaceAll(`%%HTMLTOKEN${index}%%`, html);
+  });
+  return output;
 }
 
 function slugify(value) {
@@ -117,6 +130,13 @@ function renderBlocks(lines) {
       continue;
     }
 
+    if (/^```/.test(line.trim())) {
+      const [codeHtml, nextIndex] = renderCodeBlock(lines, i);
+      html.push(codeHtml);
+      i = nextIndex;
+      continue;
+    }
+
     const h3 = line.match(/^###\s+(.+)$/);
     if (h3) {
       const nextClasses = parseClassLine(lines[i + 1] || "");
@@ -174,6 +194,21 @@ function renderBlocks(lines) {
     i = nextIndex;
   }
   return html.join("\n");
+}
+
+function renderCodeBlock(lines, start) {
+  const first = lines[start].trim();
+  const language = first.replace(/^```/, "").trim();
+  const code = [];
+  let i = start + 1;
+  while (i < lines.length && !/^```/.test(lines[i].trim())) {
+    code.push(lines[i]);
+    i += 1;
+  }
+  if (i < lines.length) i += 1;
+  const languageAttr = language ? ` data-language="${escapeHtml(language)}"` : "";
+  const classAttr = language ? ` class="language-${escapeHtml(language)}"` : "";
+  return [`<pre${languageAttr}><code${classAttr}>${escapeHtml(code.join("\n"))}</code></pre>`, i];
 }
 
 function renderBlockquote(lines, start) {
@@ -271,10 +306,23 @@ function renderMarkdown(markdown, layout) {
       ...rest.map((section) => `<section class="section">\n<h2>${inlineMarkdown(section.heading)}</h2>\n${renderBlocks(section.lines)}\n</section>`),
     ].join("\n");
   }
+  if (layout === "post") {
+    return sections.map((section) => {
+      if (!section.heading) return renderBlocks(section.lines);
+      return `<section class="post-section">\n<h2>${inlineMarkdown(section.heading)}</h2>\n${renderBlocks(section.lines)}\n</section>`;
+    }).join("\n");
+  }
   return sections.map((section) => {
     if (!section.heading) return `<section class="section">\n${renderBlocks(section.lines)}\n</section>`;
     return `<section class="section">\n<h2>${inlineMarkdown(section.heading)}</h2>\n${renderBlocks(section.lines)}\n</section>`;
   }).join("\n");
+}
+
+function rootHref(href) {
+  if (!href || href.startsWith("http") || href.startsWith("/") || href.startsWith("#") || href.startsWith("mailto:")) {
+    return href;
+  }
+  return `/${href}`;
 }
 
 function renderHeader(page) {
@@ -299,9 +347,9 @@ function renderHeader(page) {
         [null, page.switch_url || "zh.html", "中文"],
       ];
   return `<header class="site-header">
-  <a class="brand" href="${brandHref}">${brand}</a>
+  <a class="brand" href="${rootHref(brandHref)}">${brand}</a>
   <nav class="nav" aria-label="${zh ? "主导航" : "Primary navigation"}">
-    ${links.map(([active, href, label]) => `<a ${active && page.active === active ? 'class="active" ' : ""}href="${href}">${label}</a>`).join("\n    ")}
+    ${links.map(([active, href, label]) => `<a ${active && page.active === active ? 'class="active" ' : ""}href="${rootHref(href)}">${label}</a>`).join("\n    ")}
   </nav>
 </header>`;
 }
@@ -387,22 +435,43 @@ ${renderPostCards(selected)}
 function renderPostCards(posts) {
   return `<div class="post-list">
 ${posts.map((post) => `<article class="post-card">
-  <div class="post-meta"><time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date)}</time>${post.tags.length ? `<span>${post.tags.map(escapeHtml).join(" · ")}</span>` : ""}</div>
+  ${renderPostMeta(post)}
   <h3><a href="${escapeHtml(post.permalink.replace(/^\//, ""))}">${inlineMarkdown(post.title)}</a></h3>
   <p>${escapeHtml(post.summary)}</p>
 </article>`).join("\n")}
 </div>`;
 }
 
+function renderPostMeta(post) {
+  const tags = post.tags.length
+    ? `<span class="post-tags">${post.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</span>`
+    : "";
+  return `<div class="post-meta"><time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date)}</time>${tags}</div>`;
+}
+
+function stripDuplicatePostTitle(markdown, title) {
+  const trimmed = markdown.replace(/^\s+/, "");
+  const titleLine = `# ${title}`;
+  if (trimmed.startsWith(`${titleLine}\n`)) {
+    return trimmed.slice(titleLine.length).replace(/^\n+/, "");
+  }
+  return trimmed;
+}
+
 function renderPostPage(post) {
+  const articleMarkdown = stripDuplicatePostTitle(post.markdown, post.title);
+  const blogListHref = post.zh ? "/zh-blog.html" : "/blog.html";
+  const blogListLabel = post.zh ? "返回博客列表" : "Back to Blog";
   const body = `<article class="post-page">
+  <a class="back-to-blog" href="${blogListHref}">${blogListLabel}</a>
   <header class="post-header">
-    <p class="eyebrow">${post.zh ? "博客" : "Blog"}</p>
+    <p class="eyebrow">${post.zh ? "博客文章" : "Technical Writing"}</p>
     <h1>${inlineMarkdown(post.title)}</h1>
-    <div class="post-meta"><time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date)}</time>${post.tags.length ? `<span>${post.tags.map(escapeHtml).join(" · ")}</span>` : ""}</div>
+    <p class="post-deck">${escapeHtml(post.summary)}</p>
+    ${renderPostMeta(post)}
   </header>
   <section class="markdown-content">
-${renderMarkdown(post.markdown, "post")}
+${renderMarkdown(articleMarkdown, "post")}
   </section>
 </article>`;
   return renderPage({
@@ -488,7 +557,7 @@ function renderPage(page, body) {
     <link rel="alternate" hreflang="en" href="https://carp84.github.io${page.href_en}">
     <link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io${page.href_zh}">
     <link rel="alternate" hreflang="x-default" href="https://carp84.github.io${page.href_default}">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
     ${renderJsonLd(page)}
   </head>
   <body${zh ? ' class="zh"' : ""}>
