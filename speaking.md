@@ -14,7 +14,7 @@ headline: Selected technical talks.
 permalink: /speaking.html
 ---
 {:.talk-list}
-1. <time>2026</time><span>Flink Forward Asia: Building an AI-Native Multimodal Lake with Apache Paimon & Milvus ([video](https://www.bilibili.com/video/BV1ofTF67EA8/?vd_source=653e91d966d594387e031289bdc86939), [transcript](https://mp.weixin.qq.com/s/DqWBHuWCtdhcTibCx4zkHw))</span>
+1. <time>2026</time><span>[Flink Forward Asia: Building an AI-Native Multimodal Lake with Apache Paimon & Milvus](https://mp.weixin.qq.com/s/DqWBHuWCtdhcTibCx4zkHw) ([video](https://www.bilibili.com/video/BV1ofTF67EA8/?vd_source=653e91d966d594387e031289bdc86939))</span>
 1. <time>2025</time>[Yunqi Conference: Alibaba Cloud Milvus, a professional-grade vector database for the AI era](https://mp.weixin.qq.com/s/J2dYjx8yfXmDrJ4onT_ZQw)
 1. <time>2025</time>[Yunqi Conference: EMR AI, Fusion/Stella TPC Champions](https://mp.weixin.qq.com/s/VlZS8zIHzPidf4xv1mrOJw)
 1. <time>2025</time>[DataFun Data+AI Summit: OpenLake, a Lakehouse Platform Solution for the AI Era](https://zhuanlan.zhihu.com/p/1915737439659589653)
