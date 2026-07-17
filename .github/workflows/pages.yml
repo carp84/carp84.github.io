@@ -34,6 +34,7 @@ jobs:
           path: blog-source
           sparse-checkout: |
             publish
+            preview
             assets
       - name: Setup Node.js
         uses: actions/setup-node@v4

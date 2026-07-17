@@ -37,12 +37,34 @@ Blog drafts can live in a private repository, for example `carp84/carp84-blog`:
 
 ```text
 draft/
+preview/
 publish/
 assets/
 ```
 
-Only Markdown files under `publish/` are included in the public homepage build. Drafts should remain outside `publish/`.
+Only Markdown files under `publish/` are included in the public blog index and sitemaps. Drafts should remain outside `publish/`.
 Public images and downloadable files should live under `assets/`, and posts should reference them with relative paths such as `../assets/my-post/image.png`.
+
+Markdown files under `preview/` are rendered as unlisted private-review pages. They are not linked from the blog index, are not included in sitemaps, and are marked `noindex, nofollow`. A preview post must include `preview_token`:
+
+```markdown
+---
+title: My Draft Post
+date: 2026-07-17
+lang: en
+slug: my-draft-post
+summary: Draft for private review.
+preview_token: review-token-123
+---
+```
+
+The preview URL is:
+
+```text
+/_preview/<preview_token>/<slug>.html
+```
+
+Preview links are not authenticated. Anyone with the link can read the page. To publish a previewed post, move it from `preview/` to `publish/`; do not copy it. The next full GitHub Pages build removes the old preview URL. The build fails if `preview/` and `publish/` contain the same slug.
 
 Each published post should use front matter:
 

@@ -367,8 +367,7 @@ function summarize(markdown, fallback = "") {
   return stripHtml(inlineMarkdown(text)).slice(0, 180);
 }
 
-function readBlogPosts() {
-  const sourceDir = path.resolve(root, process.env.BLOG_SOURCE_DIR || "blog-source/publish");
+function readPostDirectory(sourceDir, mode) {
   if (!fs.existsSync(sourceDir)) return [];
   const files = fs.readdirSync(sourceDir, { recursive: true })
     .filter((file) => file.endsWith(".md") || file.endsWith(".markdown"))
@@ -385,10 +384,25 @@ function readBlogPosts() {
       .split(",")
       .map((tag) => tag.trim())
       .filter(Boolean);
-    const permalink = frontMatter.permalink || `/${zh ? "zh-blog" : "blog"}/${slug}.html`;
+    let permalink;
+    let noindex = false;
+    if (mode === "preview") {
+      const previewToken = frontMatter.preview_token || "";
+      if (!previewToken) {
+        throw new Error(`Preview post "${slug}" must set preview_token`);
+      }
+      if (!/^[A-Za-z0-9_-]+$/.test(previewToken)) {
+        throw new Error(`Preview post "${slug}" has an invalid preview_token`);
+      }
+      permalink = frontMatter.permalink || `/_preview/${previewToken}/${slug}.html`;
+      noindex = true;
+    } else {
+      permalink = frontMatter.permalink || `/${zh ? "zh-blog" : "blog"}/${slug}.html`;
+    }
     return {
       ...frontMatter,
       source: file,
+      mode,
       markdown,
       lang,
       zh,
@@ -399,14 +413,32 @@ function readBlogPosts() {
       summary: summarize(markdown, frontMatter.summary),
       permalink,
       canonical: permalink,
-      href_en: frontMatter.href_en || (zh ? "/blog.html" : permalink),
-      href_zh: frontMatter.href_zh || (zh ? permalink : "/zh-blog.html"),
-      href_default: frontMatter.href_default || (zh ? "/blog.html" : permalink),
+      href_en: frontMatter.href_en || (mode === "preview" ? permalink : zh ? "/blog.html" : permalink),
+      href_zh: frontMatter.href_zh || (mode === "preview" ? permalink : zh ? permalink : "/zh-blog.html"),
+      href_default: frontMatter.href_default || (mode === "preview" ? permalink : zh ? "/blog.html" : permalink),
       active: "blog",
       layout: "post",
+      noindex,
       switch_url: zh ? "blog.html" : "zh-blog.html",
     };
   }).sort((a, b) => String(b.date).localeCompare(String(a.date)) || a.title.localeCompare(b.title));
+}
+
+function readBlogPosts() {
+  return readPostDirectory(path.resolve(root, process.env.BLOG_SOURCE_DIR || "blog-source/publish"), "publish");
+}
+
+function readPreviewPosts() {
+  return readPostDirectory(path.resolve(root, process.env.BLOG_PREVIEW_DIR || "blog-source/preview"), "preview");
+}
+
+function assertNoPreviewConflicts(posts, previewPosts) {
+  const publishedSlugs = new Set(posts.map((post) => post.slug));
+  for (const post of previewPosts) {
+    if (publishedSlugs.has(post.slug)) {
+      throw new Error(`Preview post "${post.slug}" has the same slug as a published post. Move it out of preview/ before publishing.`);
+    }
+  }
 }
 
 function renderBlogList(posts, lang) {
@@ -462,10 +494,12 @@ function renderPostPage(post) {
   const articleMarkdown = stripDuplicatePostTitle(post.markdown, post.title);
   const blogListHref = post.zh ? "/zh-blog.html" : "/blog.html";
   const blogListLabel = post.zh ? "返回博客列表" : "Back to Blog";
+  const backLink = post.mode === "preview" ? "" : `  <a class="back-to-blog" href="${blogListHref}">${blogListLabel}</a>`;
+  const eyebrow = post.mode === "preview" ? (post.zh ? "预览草稿" : "Draft Preview") : (post.zh ? "博客文章" : "Technical Writing");
   const body = `<article class="post-page">
-  <a class="back-to-blog" href="${blogListHref}">${blogListLabel}</a>
+${backLink}
   <header class="post-header">
-    <p class="eyebrow">${post.zh ? "博客文章" : "Technical Writing"}</p>
+    <p class="eyebrow">${eyebrow}</p>
     <h1>${inlineMarkdown(post.title)}</h1>
     <p class="post-deck">${escapeHtml(post.summary)}</p>
     ${renderPostMeta(post)}
@@ -552,6 +586,7 @@ function renderPage(page, body) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="${escapeHtml(page.description || "")}">
+    ${page.noindex ? '<meta name="robots" content="noindex, nofollow">' : ""}
     <title>${escapeHtml(page.title || "")}</title>
     <link rel="canonical" href="https://carp84.github.io${page.canonical}">
     <link rel="alternate" hreflang="en" href="https://carp84.github.io${page.href_en}">
@@ -622,6 +657,8 @@ fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
 
 const blogPosts = readBlogPosts();
+const previewPosts = readPreviewPosts();
+assertNoPreviewConflicts(blogPosts, previewPosts);
 const sitemapEntries = [];
 
 for (const pageFile of pages) {
@@ -649,6 +686,13 @@ for (const post of blogPosts) {
     priority: "0.6",
     changefreq: "yearly",
   });
+}
+
+for (const post of previewPosts) {
+  const dest = outputPathFor(post);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.writeFileSync(dest, renderPostPage(post));
+  console.log(`built ${path.relative(root, dest)}`);
 }
 
 fs.writeFileSync(path.join(outDir, "sitemap.xml"), generateSitemap(sitemapEntries));
