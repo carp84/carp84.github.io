@@ -49,7 +49,7 @@ Mentor
 {: .ecosystem-table}
 | Layer | Apache Project | Alibaba Product | Status |
 |---|---|---|---|
-| Streaming Storage | Fluss | Streaming Storage for Apache Fluss* | Graduating |
+| Streaming Storage | Fluss | Streaming Storage for Apache Fluss* | TLP |
 | Lake Format | Paimon | Milvus x DLF Vector Lake | TLP |
 | Lakehouse mgmt | Amoro | DLF* | Incubating |
 | Shuffle Service | Celeborn | EMR Fusion for Apache Spark | TLP |

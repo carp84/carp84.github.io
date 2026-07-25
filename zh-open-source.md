@@ -48,7 +48,7 @@ Mentor
 
 | 层次 | Apache 项目 | 阿里云产品 | 状态 |
 |---|---|---|---|
-| 流式存储 | Fluss | Streaming Storage for Apache Fluss* | 毕业中 |
+| 流式存储 | Fluss | Streaming Storage for Apache Fluss* | TLP |
 | 湖格式 | Paimon | Milvus x DLF Vector Lake | TLP |
 | 湖仓管理 | Amoro | DLF* | 孵化中 |
 | Shuffle 服务 | Celeborn | EMR Fusion for Apache Spark | TLP |
