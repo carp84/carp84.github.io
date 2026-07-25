@@ -3,6 +3,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const outDir = path.join(root, "_site");
+const siteUrl = (process.env.SITE_URL || "https://carp84.github.io").replace(/\/+$/, "");
 const pages = [
   "index.md",
   "zh.md",
@@ -524,8 +525,8 @@ function renderJsonLd(page) {
   const data = {
     "@context": "https://schema.org",
     "@type": "Person",
-    "@id": "https://carp84.github.io/#yu-li",
-    url: "https://carp84.github.io/",
+    "@id": `${siteUrl}/#yu-li`,
+    url: `${siteUrl}/`,
     name: zh ? "李钰" : "Yu Li",
     alternateName: zh ? ["Yu Li", "绝顶", "carp84", "liyu"] : ["李钰", "绝顶", "carp84", "liyu"],
     email: "mailto:liyu@apache.org",
@@ -588,10 +589,10 @@ function renderPage(page, body) {
     <meta name="description" content="${escapeHtml(page.description || "")}">
     ${page.noindex ? '<meta name="robots" content="noindex, nofollow">' : ""}
     <title>${escapeHtml(page.title || "")}</title>
-    <link rel="canonical" href="https://carp84.github.io${page.canonical}">
-    <link rel="alternate" hreflang="en" href="https://carp84.github.io${page.href_en}">
-    <link rel="alternate" hreflang="zh-CN" href="https://carp84.github.io${page.href_zh}">
-    <link rel="alternate" hreflang="x-default" href="https://carp84.github.io${page.href_default}">
+    <link rel="canonical" href="${absoluteUrl(page.canonical)}">
+    <link rel="alternate" hreflang="en" href="${absoluteUrl(page.href_en)}">
+    <link rel="alternate" hreflang="zh-CN" href="${absoluteUrl(page.href_zh)}">
+    <link rel="alternate" hreflang="x-default" href="${absoluteUrl(page.href_default)}">
     <link rel="stylesheet" href="/styles.css">
     ${renderJsonLd(page)}
   </head>
@@ -610,7 +611,7 @@ function outputPathFor(page) {
 }
 
 function absoluteUrl(value) {
-  return `https://carp84.github.io${value}`;
+  return `${siteUrl}${value}`;
 }
 
 function generateSitemap(entries) {
@@ -637,6 +638,15 @@ ${urls}
 
 function generateTextSitemap(entries) {
   return `${entries.map((entry) => absoluteUrl(entry.canonical)).join("\n")}\n`;
+}
+
+function generateRobotsTxt() {
+  return `User-agent: *
+Allow: /
+
+Sitemap: ${siteUrl}/sitemap.xml
+Sitemap: ${siteUrl}/sitemap.txt
+`;
 }
 
 function copyDirectory(src, dest) {
@@ -697,9 +707,10 @@ for (const post of previewPosts) {
 
 fs.writeFileSync(path.join(outDir, "sitemap.xml"), generateSitemap(sitemapEntries));
 fs.writeFileSync(path.join(outDir, "sitemap.txt"), generateTextSitemap(sitemapEntries));
+fs.writeFileSync(path.join(outDir, "robots.txt"), generateRobotsTxt());
 
 copyDirectory(path.resolve(root, process.env.BLOG_ASSETS_DIR || "blog-source/assets"), path.join(outDir, "assets"));
 
-for (const file of ["styles.css", "robots.txt", "llms.txt", "google0b1d946385823c31.html"]) {
+for (const file of ["styles.css", "llms.txt", "google0b1d946385823c31.html"]) {
   fs.copyFileSync(path.join(root, file), path.join(outDir, file));
 }

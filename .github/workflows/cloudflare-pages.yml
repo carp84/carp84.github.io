@@ -1,0 +1,51 @@
+name: Deploy Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [blog_publish]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: cloudflare-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      BLOG_REPO: ${{ secrets.BLOG_REPO }}
+      BLOG_REPO_TOKEN: ${{ secrets.BLOG_REPO_TOKEN }}
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Checkout published blog posts
+        if: ${{ env.BLOG_REPO != '' && env.BLOG_REPO_TOKEN != '' }}
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.BLOG_REPO }}
+          token: ${{ env.BLOG_REPO_TOKEN }}
+          path: blog-source
+          sparse-checkout: |
+            publish
+            preview
+            assets
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build site
+        run: node scripts/build.mjs
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy _site --project-name=${{ vars.CLOUDFLARE_PROJECT_NAME }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
